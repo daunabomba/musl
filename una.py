@@ -16,7 +16,18 @@ def target_configure(staging_dir: Path, image_dir: Path, arch="x32"):
     repo_root = Path(__file__).parent
     
     target = get_target_triple(arch)
-    libcc = get_arch_flags(arch)
+    libcc = ""
+    
+    # Dynamically find the baremetal builtins library using the exact llvm arch name
+    llvm_arch = target.split('-')[0]
+    expected_lib_name = f"libclang_rt.builtins-bmf-{llvm_arch}.a"
+    
+    builtins_libs = list(staging_dir.rglob(expected_lib_name))
+    if builtins_libs:
+        libcc = str(builtins_libs[0])
+        colors.info(f"Musl: Using builtins library: {libcc}")
+    else:
+        raise RuntimeError(f"Musl: Required baremetal builtins library '{expected_lib_name}' not found in {staging_dir}!")
 
     cmd = [
         "./configure",
