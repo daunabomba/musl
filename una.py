@@ -18,9 +18,8 @@ def target_configure(staging_dir: Path, image_dir: Path, arch="x32"):
     target = get_target_triple(arch)
     libcc = ""
     
-    # Dynamically find the baremetal builtins library using the exact llvm arch name
-    llvm_arch = target.split('-')[0]
-    expected_lib_name = f"libclang_rt.builtins-{llvm_arch}-bmf.a"
+    # Dynamically find the baremetal builtins library using the exact una arch name
+    expected_lib_name = f"libclang_rt.builtins-{arch}-bmf.a"
     
     builtins_libs = list(staging_dir.rglob(expected_lib_name))
     if builtins_libs:
