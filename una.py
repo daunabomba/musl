@@ -20,7 +20,7 @@ def target_configure(staging_dir: Path, image_dir: Path, arch="x32"):
     
     # Dynamically find the baremetal builtins library using the exact llvm arch name
     llvm_arch = target.split('-')[0]
-    expected_lib_name = f"libclang_rt.builtins-bmf-{llvm_arch}.a"
+    expected_lib_name = f"libclang_rt.builtins-{llvm_arch}-bmf.a"
     
     builtins_libs = list(staging_dir.rglob(expected_lib_name))
     if builtins_libs:
